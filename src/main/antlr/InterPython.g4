@@ -1,6 +1,6 @@
 grammar InterPython;
 
-code : (statement)* EOF;
+code : statement ( ('\r' | '\n' | '\r\n' | ';') statement )* ('\r' | '\n' | '\r\n' | ';')* EOF;
 
 statement :
       expression;
@@ -81,10 +81,10 @@ await_expr :
     ;
 
 call_slice_attribute_expr :
-    call_slice_attribute_expr ('.' NAME)+ |          // attribute
-    call_slice_attribute_expr '[' expression ']'         //subscription
-    call_slice_attribute_expr '[' expression? ':' expression? ':'? expression? ']' |         //slice
-    call_slice_attribute_expr '(' (star_expr? (',' star_expr)* )?  (',' NAME '=' expression)* (',' must_star_expr)? (',')? ')' |         //call
+    atom ('.' NAME)+ |          // attribute
+    atom '[' expression ']'|        //subscription
+    atom '[' expression? ':' expression? ':'? expression? ']' |         //slice
+    atom '(' (star_expr? (',' star_expr)* )?  (',' NAME '=' expression)* (',' must_star_expr)? (',')? ')' |         //call
     atom
     ;
 
