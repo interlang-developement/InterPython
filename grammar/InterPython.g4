@@ -1,9 +1,17 @@
 grammar InterPython;
 
+@header {
+package org.interpython.antlr;
+}
+
 code : statement ( ('\r' | '\n' | '\r\n' | ';') statement )* ('\r' | '\n' | '\r\n' | ';')* EOF;
 
 statement :
-      expression;
+      expression |
+      assignment;
+
+assignment :
+    NAME '=' expression;
 
 /* order of operations START */
 

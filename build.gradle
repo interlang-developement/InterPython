@@ -25,10 +25,24 @@ dependencies {
 
 generateGrammarSource {
     maxHeapSize = "64m"
+    outputDirectory = file("src/generated/java/org/interpython/antlr")
+    arguments += ["-visitor"]
 }
 
-clean.doLast {
-    file('generated-src').deleteDir()
+sourceSets {
+    main {
+        antlr {
+            srcDirs = ['grammar']
+        }
+
+        java {
+            srcDirs = ['src/main/java', 'src/generated/java']
+        }
+    }
+}
+
+clean{
+    delete "src/generated/java/org/interpython/antlr"
 }
 
 test {
