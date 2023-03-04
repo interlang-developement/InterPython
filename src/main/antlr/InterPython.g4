@@ -5,10 +5,20 @@ code : (statement)* EOF;
 statement :
       expression;
 
+/* order of operations START */
+
 expression :
-    or_expression (IF or_expression ELSE or_expression)*
+    lambda_expression
     ;
 
+lambda_expression :
+    'lambda' NAME (',' NAME)* (',')? ':' lambda_expression |
+    if_expression
+    ;
+
+if_expression :
+    or_expression (IF or_expression ELSE if_expression)*
+    ;
 or_expression :
     and_expression (OR or_expression)*
     ;
@@ -63,7 +73,27 @@ unary_symbol :
     ;
 
 exponetial :
-    atom (POWER exponetial)*
+    await_expr (POWER exponetial)*
+    ;
+
+await_expr :
+    ('await')* call_slice_attribute_expr
+    ;
+
+call_slice_attribute_expr :
+    call_slice_attribute_expr ('.' NAME)+ |          // attribute
+    call_slice_attribute_expr '[' expression ']'         //subscription
+    call_slice_attribute_expr '[' expression? ':' expression? ':'? expression? ']' |         //slice
+    call_slice_attribute_expr '(' (star_expr? (',' star_expr)* )?  (',' NAME '=' expression)* (',' must_star_expr)? (',')? ')' |         //call
+    atom
+    ;
+
+star_expr :
+    ('*')? expression
+    ;
+
+must_star_expr :
+    '*' expression
     ;
 
 
@@ -111,8 +141,13 @@ comp_op :
     '!='
     ;
 
+/* order of operations END */
+
 atom :
     '(' expression ')' |
+    '[' (expression (',' expression)*)? ']' |
+    '{' (expression (',' expression)*)? '}' |
+    '{' (expression ':' expression (',' expression ':' expression)*)? '}' |
     NAME |
     NUMBER |
     STRING
