@@ -1,8 +1,6 @@
 package org.interpython.antlr.parsing.expressions.builtinTypes;
 
 import org.interpython.antlr.parsing.expressions.Expression;
-import org.interpython.core.types.PyInt;
-import org.interpython.core.types.PyObject;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -20,8 +18,6 @@ public class IntExpression implements Expression, Opcodes {
 
         methodVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, "org/interpython/core/types/PyInt", "<init>", "(J)V", false);
 //        methodVisitor.visitInsn(Opcodes.ASTORE + 2);
-
-
     }
 
     @Override
