@@ -4,7 +4,7 @@ grammar InterPython;
 package org.interpython.antlr;
 }
 
-code : statement ( ('\r' | '\n' | '\r\n' | ';') statement )* ('\r' | '\n' | '\r\n' | ';')* EOF;
+code : (statement ( ('\r' | '\n' | '\r\n' | ';') statement )* ('\r' | '\n' | '\r\n' | ';')*)? EOF;
 
 statement :
       expression |
@@ -15,86 +15,29 @@ assignment :
 
 /* order of operations START */
 
-expression :
-    lambda_expression
-    ;
-
-lambda_expression :
-    'lambda' NAME (',' NAME)* (',')? ':' lambda_expression |
-    if_expression
-    ;
-
-if_expression :
-    or_expression (IF or_expression ELSE if_expression)*
-    ;
-or_expression :
-    and_expression (OR or_expression)*
-    ;
-
-and_expression :
-    not_expression (AND and_expression)*
-    ;
-
-not_expression :
-    NOT not_expression |
-    comparison
-    ;
-
-comparison :
-    equality (comp_op comparison)*
-    ;
-
-equality :
-    identify (eq_op equality)*
-    ;
-
-identify :
-    bitwise_or (ide_op atom)*
-    ;
-
-bitwise_or :
-    bitwise_xor (BITWISE_OR bitwise_or)*
-    ;
-
-bitwise_xor :
-    bitwise_and (BITWISE_XOR bitwise_xor)*
-    ;
-
-bitwise_and :
-    shift (BITWISE_AND bitwise_and)*
-    ;
-
-shift :
-    arith (shifts shift)*
-    ;
-
-arith :
-    term (arith_op arith)*
-    ;
-
-term :
-    unary_symbol (term_op term)*
-    ;
-
-unary_symbol :
-    unary_symbol_op unary_symbol | exponetial
-    ;
-
-exponetial :
-    await_expr (POWER exponetial)*
-    ;
-
-await_expr :
-    ('await')* call_slice_attribute_expr
-    ;
-
-call_slice_attribute_expr :
-    atom ('.' NAME)+ |          // attribute
-    atom '[' expression ']'|        //subscription
-    atom '[' expression? ':' expression? ':'? expression? ']' |         //slice
-    atom '(' (star_expr? (',' star_expr)* )?  (',' NAME '=' expression)* (',' must_star_expr)? (',')? ')' |         //call
-    atom
-    ;
+expression : atom                                                                                                   #ATOM_EXPR
+           | atom ('.' NAME)+                                                                                       #ATTRIBUTE_EXPR
+           | atom '[' expression ']'                                                                                #SUBSCRIPT_EXPR
+           | atom '[' expression? ':' expression? ':'? expression? ']'                                              #SLICE_EXPR
+           | atom '(' (star_expr? (',' star_expr)* )?  (',' NAME '=' expression)* (',' must_star_expr)? (',')? ')'  #CALL_EXPR
+           |'await' expression                                                                                      #AWAIT_EXPR
+           | expression POWER expression                                                                            #EXPONENTS_EXPR
+           | unary_symbol_op expression                                                                             #UNARY_SYMBOL_EXPR
+           | expression term_op expression                                                                          #MULTIPLICATIVE_EXPR
+           | expression arith_op expression                                                                         #ADDITIVE_EXPR
+           | expression shifts expression                                                                           #SHIFT_EXPR
+           | expression BITWISE_AND expression                                                                      #BITWISE_AND_EXPR
+           | expression BITWISE_XOR expression                                                                      #BITWISE_XOR_EXPR
+           | expression BITWISE_OR expression                                                                       #BITWISE_OR_EXPR
+           | expression ide_op expression                                                                           #IDENTITY_EXPR
+           | expression eq_op expression                                                                            #EQUALITY_EXPR
+           | expression comp_op expression                                                                          #COMPARISON_EXPR
+           | NOT expression                                                                                         #LOGICAL_NOT_EXPR
+           | expression AND expression                                                                              #LOGICAL_AND_EXPR
+           | expression OR expression                                                                               #LOGICAL_OR_EXPR
+           | expression IF expression ELSE expression                                                               #TERNARY_EXPR
+           | 'lambda' NAME (',' NAME)* (',')? ':' expression                                                        #LAMBDA_EXPR
+           ;
 
 star_expr :
     ('*')? expression
@@ -151,14 +94,13 @@ comp_op :
 
 /* order of operations END */
 
-atom :
-    '(' expression ')' |
-    '[' (expression (',' expression)*)? ']' |
-    '{' (expression (',' expression)*)? '}' |
-    '{' (expression ':' expression (',' expression ':' expression)*)? '}' |
-    NAME |
-    NUMBER |
-    STRING
+atom : '(' expression ')'                                                       #PARENTHESIS
+     | '[' (expression (',' expression)*)? ']'                                  #LIST
+     | '{' (expression (',' expression)*)? '}'                                  #SET
+     | '{' (expression ':' expression (',' expression ':' expression)*)? '}'    #DICT
+     | NAME                                                                     #VAR
+     | NUMBER                                                                   #INT
+     | STRING                                                                   #STRING
     ;
 
 IF : 'if';

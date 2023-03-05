@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'antlr'
+    id 'java-library'
 }
 
 group 'org.interpython'
@@ -21,6 +22,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     antlr "org.antlr:antlr4:4.12.0" // use ANTLR version 4
     compile "org.antlr:antlr4-runtime:4.12.0"
+    implementation('org.ow2.asm:asm:7.1')
 }
 
 generateGrammarSource {
