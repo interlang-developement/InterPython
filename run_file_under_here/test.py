@@ -1,2 +1,1 @@
-a = "Expr"
-b = "Expr"
+a = 10
