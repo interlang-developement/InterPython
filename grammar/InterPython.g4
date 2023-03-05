@@ -50,7 +50,7 @@ must_star_expr :
 
 unary_symbol_op :
     '~' |
-    '+'
+    '+' |
     '-'
     ;
 
@@ -118,6 +118,6 @@ POWER : '**';
 
 NAME : [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER : [0-9]+;
-STRING : '\'' NAME '\'' | '"' NAME '"';
+STRING : '\'' (~('\r' | '\n' | '\'') ('\\\'')? )* '\'' | '"' (~('\r' | '\n' | '"') ('\\"')? )* '"';
 
 WS: [ \t\n\r]+ -> skip ;

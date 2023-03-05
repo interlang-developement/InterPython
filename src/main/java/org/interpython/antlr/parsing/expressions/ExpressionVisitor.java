@@ -4,6 +4,8 @@ import org.interpython.antlr.InterPythonBaseVisitor;
 import org.interpython.antlr.InterPythonParser;
 import org.interpython.antlr.parsing.expressions.builtinTypes.IntExpression;
 import org.interpython.antlr.parsing.expressions.builtinTypes.StringExpression;
+import org.interpython.antlr.parsing.expressions.builtinTypes.VariableReference;
+import org.interpython.antlr.parsing.statements.StatementVisitor;
 
 public class ExpressionVisitor extends InterPythonBaseVisitor<Expression> {
     @Override
@@ -14,5 +16,10 @@ public class ExpressionVisitor extends InterPythonBaseVisitor<Expression> {
     @Override
     public IntExpression visitINT(InterPythonParser.INTContext ctx) {
         return new IntExpression(Integer.parseInt(ctx.getText()));
+    }
+
+    @Override
+    public Expression visitVAR(InterPythonParser.VARContext ctx) {
+        return new VariableReference(StatementVisitor.variables.get(ctx.getText()));
     }
 }
