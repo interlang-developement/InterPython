@@ -69,4 +69,9 @@ public class PyObject {
     public PyString __name__() {
         return new PyString("object");
     }
+
+    public PyFloat __float__() {
+        // UnsupportedOperation
+        throw new RuntimeException("UnsupportedOperation");
+    }
 }
