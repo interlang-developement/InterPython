@@ -57,16 +57,4 @@ public class PyObject {
         // UnsupportedOperation
         throw new RuntimeException("UnsupportedOperation");
     }
-
-    public PyString __str__() {
-        return new PyString("<class 'object'>");
-    }
-
-    public PyString __repr__() {
-        return new PyString("\"<class 'object'>\"");
-    }
-
-    public PyString __name__() {
-        return new PyString("object");
-    }
 }

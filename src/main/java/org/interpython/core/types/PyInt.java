@@ -28,7 +28,7 @@ public class PyInt extends PyObject{
         try{
             other.__int__();
         } catch(RuntimeException e) {
-            throw new RuntimeException("TypeError: unsupported operand type(s) for +: 'int' and " + other.__name__() +"\"");
+            throw new RuntimeException("TypeError: unsupported operand type(s) for +: 'int' and 'str'");
         }
 
         return new PyInt(this.value + other.__int__().value);
@@ -39,7 +39,7 @@ public class PyInt extends PyObject{
         try {
             other.__int__();
         } catch(RuntimeException e) {
-            throw new RuntimeException("TypeError: unsupported operand type(s) for -: 'int' and " + other.__name__() +"\"");
+            throw new RuntimeException("TypeError: unsupported operand type(s) for -: 'int' and 'str'");
         }
 
         return new PyInt(this.value - other.__int__().value);
@@ -50,7 +50,7 @@ public class PyInt extends PyObject{
         try {
             other.__int__();
         } catch(RuntimeException e) {
-            throw new RuntimeException("TypeError: unsupported operand type(s) for *: 'int' and " + other.__name__() +"\"");
+            throw new RuntimeException("TypeError: unsupported operand type(s) for *: 'int' and 'str'");
         }
 
         return new PyInt(this.value * other.__int__().value);
@@ -68,7 +68,7 @@ public class PyInt extends PyObject{
         try {
             other.__int__();
         } catch(RuntimeException e) {
-            throw new RuntimeException("TypeError: unsupported operand type(s) for /: 'int' and " + other.__name__() +"\"");
+            throw new RuntimeException("TypeError: unsupported operand type(s) for /: 'int' and 'str'");
         }
 
         return new PyInt(this.value / other.__int__().value);
@@ -79,7 +79,7 @@ public class PyInt extends PyObject{
         try {
             other.__int__();
         } catch(RuntimeException e) {
-            throw new RuntimeException("TypeError: unsupported operand type(s) for %: 'int' and " + other.__name__() +"\"");
+            throw new RuntimeException("TypeError: unsupported operand type(s) for %: 'int' and 'str'");
         }
 
         return new PyInt(this.value % other.__int__().value);
@@ -88,10 +88,5 @@ public class PyInt extends PyObject{
     @Override
     public PyInt __int__() {
         return this;
-    }
-
-    @Override
-    public PyString __name__() {
-        return new PyString("int");
     }
 }
