@@ -47,4 +47,9 @@ public class PyFloat extends PyObject{
                 this.value.doubleValue() / other.__float__().value.doubleValue()
         );
     }
+
+    @Override
+    public PyString __name__() {
+        return new PyString("float");
+    }
 }
