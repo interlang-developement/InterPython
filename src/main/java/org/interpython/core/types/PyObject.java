@@ -62,6 +62,11 @@ public class PyObject {
         throw new RuntimeException("UnsupportedOperation");
     }
 
+    public PyDict __dict__() {
+        // UnsupportedOperation
+        throw new RuntimeException("UnsupportedOperation");
+    }
+
     public PyString __str__() {
         return new PyString("<class 'object'>");
     }
@@ -72,10 +77,5 @@ public class PyObject {
 
     public PyString __name__() {
         return new PyString("object");
-    }
-
-    public PyFloat __float__() {
-        // UnsupportedOperation
-        throw new RuntimeException("UnsupportedOperation");
     }
 }
