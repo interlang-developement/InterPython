@@ -32,7 +32,7 @@ public class StatementVisitor extends InterPythonBaseVisitor<Statements> {
         variables.put(name, variable);
 
         variableCount ++;
-        variableCount += expr.localVariableCount();
+        variableCount += expr.localVariableCount() ;
 
         AssignmentStatement statement = new AssignmentStatement(variable);
 

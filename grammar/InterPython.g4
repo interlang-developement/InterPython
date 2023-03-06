@@ -61,7 +61,6 @@ arith_op :
 
 term_op :
     '*' |
-    '@' |
     '/' |
     '//' |
     '%'
@@ -100,6 +99,7 @@ atom : '(' expression ')'                                                       
      | '{' (expression ':' expression (',' expression ':' expression)*)? '}'    #DICT
      | NAME                                                                     #VAR
      | NUMBER                                                                   #INT
+     | FLOAT                                                                    #FLOAT
      | STRING                                                                   #STRING
     ;
 
@@ -118,6 +118,7 @@ POWER : '**';
 
 NAME : [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER : [0-9]+;
+FLOAT: NUMBER '.' NUMBER;
 STRING : '\'' (~('\r' | '\n' | '\'') ('\\\'')? )* '\'' | '"' (~('\r' | '\n' | '"') ('\\"')? )* '"';
 
 WS: [ \t\n\r]+ -> skip ;

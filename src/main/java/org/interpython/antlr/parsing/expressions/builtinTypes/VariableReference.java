@@ -3,9 +3,8 @@ package org.interpython.antlr.parsing.expressions.builtinTypes;
 import org.interpython.antlr.parsing.expressions.Expression;
 import org.interpython.core.utils.Variable;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 
-public class VariableReference implements Expression, Opcodes {
+public class VariableReference implements Expression {
     Variable variable;
 
     public VariableReference(Variable variable) {
@@ -19,6 +18,6 @@ public class VariableReference implements Expression, Opcodes {
 
     @Override
     public int localVariableCount() {
-        return 1;
+        return 0;
     }
 }

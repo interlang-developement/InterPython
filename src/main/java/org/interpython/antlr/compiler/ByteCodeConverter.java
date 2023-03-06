@@ -1,7 +1,5 @@
 package org.interpython.antlr.compiler;
 
-import org.interpython.antlr.PythonTree;
-import org.interpython.antlr.parsing.statements.AssignmentStatement;
 import org.interpython.antlr.parsing.statements.Statements;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -11,7 +9,7 @@ import java.util.Queue;
 
 public class ByteCodeConverter implements Opcodes {
 
-    public byte[] generateBytecode(Queue<Statements> instructionStatements, String name) throws Exception {
+    public byte[] generateBytecode(Queue<Statements> instructionStatements, String name) {
         ClassWriter writer = new ClassWriter(0);
         MethodVisitor visitor;
 
@@ -33,6 +31,7 @@ public class ByteCodeConverter implements Opcodes {
 
             visitor.visitMaxs(maxStack, (int) localVariablesCount); //set max stack and max local variables
             visitor.visitEnd();
+//            visitor.visitLineNumber();
         }
         writer.visitEnd();
 
