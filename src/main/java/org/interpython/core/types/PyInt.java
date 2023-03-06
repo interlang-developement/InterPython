@@ -5,22 +5,19 @@ import java.util.List;
 public class PyInt extends PyObject{
     public long value;
 
-    public PyInt(List<PyObject> args) {
-        super();
-        if(args.size() >= 2) {
-            // TypeError: int() takes at most 1 argument (args.size() given)
-        }
-
-        if(args.size() == 1) {
-            this.value = ((PyInt) args.get(0)).value;
-        } else {
-            this.value = 0;
-        }
-    }
-
     public PyInt(long value) {
         super();
         this.value = value;
+    }
+
+    @Override
+    public PyObject __new__() {
+        return new PyInt(0);
+    }
+
+    @Override
+    public void __init__(List<PyObject> args) {
+        this.value = args.get(0).__int__().value;
     }
 
     @Override
@@ -93,5 +90,10 @@ public class PyInt extends PyObject{
     @Override
     public PyString __name__() {
         return new PyString("int");
+    }
+
+    @Override
+    public PyFloat __float__() {
+        return new PyFloat(this.value);
     }
 }

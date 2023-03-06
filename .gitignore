@@ -6,3 +6,5 @@
 build
 .gradle
 src/generated/
+*.class
+*.iml

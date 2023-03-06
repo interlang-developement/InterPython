@@ -8,17 +8,19 @@ import java.util.List;
 public class PyString extends PyObject{
     public String value;
 
-    public PyString(List<PyObject> args) {
-        super();
-        if(args.size() == 1)
-            this.value = args.get(0).toString();
-        else
-            this.value = "";
-    }
-
     public PyString(String value) {
         super();
         this.value = value;
+    }
+
+    @Override
+    public PyObject __new__() {
+        return new PyString("");
+    }
+
+    @Override
+    public void __init__(List<PyObject> args) {
+        super.__init__(args);
     }
 
     @Override
@@ -35,6 +37,22 @@ public class PyString extends PyObject{
                     "Invalid literal for int() with base 10: '" + this.value + "'"
             ))).raise();
         return null;
+    }
+
+    @Override
+    public PyFloat __float__() {
+        try
+        {
+            return new PyFloat(Double.parseDouble(this.value));
+        }
+        catch(NumberFormatException e)
+        {
+            new ValueError(List.of(new PyString(
+                    "Invalid literal for int() with base 10: '" + this.value + "'"
+            ))).raise();
+        }
+
+        return new PyFloat(0.0);
     }
 
     @Override
