@@ -2,8 +2,6 @@ grammar InterPython;
 
 @header {
 package org.interpython.antlr;
-
-import org.interpython.antlr.parsing.IndentationVisitor;
 }
 
 tokens { INDENT, DEDENT }
@@ -63,7 +61,7 @@ code : lines EOF;
 lines : NEWLINE* (statement ( NEWLINE statement )* NEWLINE*)?;
 
 statement :
-//      IF expression ':' NEWLINE INDENT lines DEDENT
+      IF expression ':' NEWLINE INDENT lines DEDENT
       | expression
       | assignment
       ;
@@ -189,4 +187,4 @@ NEWLINE : ( '\r'? '\n' | '\r' ) {
 WS : [ \t]+ {
     setChannel(HIDDEN);
     if (pendingDent) { indentCount += getText().length(); }
-} ;
+} -> skip;
