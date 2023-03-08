@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -28,13 +27,33 @@ public class SyntaxErrorParser extends BaseErrorListener {
 
         if(offendingSymbol != null) {
             offendingSymbol = ((CommonToken) offendingSymbol).getText();
-            System.out.println(
-                    "  File \"" + processingFileName + "\", line " + line + "\n"
-                            + "    " + lineStr + "\n"
-                            + "    " + " ".repeat(charPositionInLine) + "^".repeat(((String) offendingSymbol).length()) + "\n"
-                            + "SyntaxError: Unexpected " + ((String) offendingSymbol).replace("<EOF>", "end of line")
-                            .replace(System.lineSeparator(), "end of line")
-            );
+            if (((String) offendingSymbol).startsWith("ui")) {
+                System.out.println(
+                        "  File \"" + processingFileName + "\", line " + line + "\n"
+                                + "    " + lineStr + "\n"
+                                + "    " + "^".repeat(Integer.parseInt(String.valueOf(((String) offendingSymbol).charAt(2)))) + "\n"
+                                + "SyntaxError: Unexpected indentation size " + ((String) offendingSymbol).charAt(2)
+
+                );
+            } else if (((String) offendingSymbol).startsWith("INDENT")) {
+                System.out.println(
+                        "  File \"" + processingFileName + "\", line " + line + "\n"
+                                + "    " + lineStr + "\n"
+                                + "    " + " ".repeat(charPositionInLine + 1) + "^^^^" + "\n"
+                                + "SyntaxError: Unexpected Indentation"
+                );
+            } else if( ((String) offendingSymbol).isBlank() && ((String) offendingSymbol).length() % 4 == 0){
+
+
+            } else {
+                System.out.println(
+                        "  File \"" + processingFileName + "\", line " + line + "\n"
+                                + "    " + lineStr + "\n"
+                                + "    " + " ".repeat(charPositionInLine) + "^".repeat(((String) offendingSymbol).replace("<EOF>", "-").length()) + "\n"
+                                + "SyntaxError: Unexpected " + ((String) offendingSymbol).replace("<EOF>", "end of line")
+                                .replace(System.lineSeparator(), "end")
+                );
+            }
         }else if((lineStr.charAt(charPositionInLine) == '\'') || (lineStr.charAt(charPositionInLine) == '\"'))
             System.out.println(
                     "  File \"" + processingFileName + "\", line " + line + "\n"
@@ -42,6 +61,8 @@ public class SyntaxErrorParser extends BaseErrorListener {
                             + "    " + " ".repeat(charPositionInLine) + "^" + "\n"
                             + "SyntaxError: Unclosed string definition"
             );
+
+//        System.err.println("line " + line + ":" + charPositionInLine + " " + msg);
 
         System.exit(1);
     }
