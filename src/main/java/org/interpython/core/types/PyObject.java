@@ -75,6 +75,10 @@ public class PyObject {
         return new PyString("\"<class 'object'>\"");
     }
 
+    public PyBool __bool__() {
+        return new PyBool(true);
+    }
+
     public PyString __name__() {
         return new PyString("object");
     }

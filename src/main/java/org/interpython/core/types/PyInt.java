@@ -96,4 +96,9 @@ public class PyInt extends PyObject{
     public PyFloat __float__() {
         return new PyFloat(this.value);
     }
+
+    @Override
+    public PyBool __bool__() {
+        return new PyBool(this.value != 0);
+    }
 }

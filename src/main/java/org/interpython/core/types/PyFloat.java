@@ -1,6 +1,7 @@
 package org.interpython.core.types;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PyFloat extends PyObject{
     Number value;
@@ -46,6 +47,11 @@ public class PyFloat extends PyObject{
         return new PyFloat(
                 this.value.doubleValue() / other.__float__().value.doubleValue()
         );
+    }
+
+    @Override
+    public PyBool __bool__() {
+        return new PyBool(!Objects.equals(this.value, 0.0));
     }
 
     @Override

@@ -61,13 +61,24 @@ code : lines EOF;
 lines : NEWLINE* (statement ( NEWLINE statement )* NEWLINE*)?;
 
 statement :
-      IF expression ':' NEWLINE INDENT lines DEDENT
+        complex_statement
       | expression
       | assignment
       ;
 
+complex_statement :
+        if_expr;
+
+if_expr :
+    IF ifexpr=expression ifblock=code_block (ELIF expression code_block)* (ELSE elseblock=code_block)?
+    ;
+
+code_block : ':' NEWLINE* INDENT lines DEDENT;
+
 assignment :
     NAME '=' expression;
+
+
 
 /* order of operations START */
 
@@ -160,6 +171,7 @@ atom : '(' expression ')'                                                       
     ;
 
 IF : 'if';
+ELIF : 'elif';
 ELSE : 'else';
 
 OR : 'or';

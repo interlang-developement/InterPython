@@ -4,6 +4,7 @@ import org.interpython.core.errors.exception.ArithmeticError.OverflowError;
 import org.interpython.core.errors.exception.valueError.ValueError;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PyString extends PyObject{
     public String value;
@@ -85,6 +86,11 @@ public class PyString extends PyObject{
             ))).raise();
         }
         return null;
+    }
+
+    @Override
+    public PyBool __bool__() {
+        return new PyBool(!Objects.equals(this.value, ""));
     }
 
     @Override

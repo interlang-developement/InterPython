@@ -1,16 +1,14 @@
 package org.interpython.antlr.parsing.statements;
 
-import org.antlr.v4.runtime.tree.ErrorNode;
 import org.interpython.antlr.InterPythonBaseVisitor;
 import org.interpython.antlr.InterPythonParser;
 import org.interpython.antlr.parsing.expressions.Expression;
 import org.interpython.antlr.parsing.expressions.ExpressionVisitor;
+import org.interpython.antlr.parsing.statements.complexStatements.CodeBlock;
+import org.interpython.antlr.parsing.statements.complexStatements.IfStatements;
 import org.interpython.core.utils.Variable;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class StatementVisitor extends InterPythonBaseVisitor<Statements> {
     public Queue<Statements> instructionsQueue = new ArrayDeque<>();
@@ -42,10 +40,28 @@ public class StatementVisitor extends InterPythonBaseVisitor<Statements> {
     }
 
     @Override
-    public Statements visitErrorNode(ErrorNode node) {
-        System.out.println("Error: " + node.getText());
+    public Statements visitCode_block(InterPythonParser.Code_blockContext ctx) {
+        return new CodeBlock(
+                ctx.lines().statement().stream().map(new StatementVisitor()::visit).toList()
+        );
+    }
 
-        System.exit(1);
-        return null;
+    @Override
+    public Statements visitIf_expr(InterPythonParser.If_exprContext ctx) {
+        var var1 = ctx.expression();
+        var ret = new IfStatements(
+                new ExpressionVisitor().visit(ctx.ifexpr), visit(ctx.ifblock), ctx.expression() == null ? new ArrayList<>() :
+                ctx.expression().subList(1, ctx.expression().size()) .stream().map(
+                x -> new ExpressionVisitor().visit(x)
+        ).toList(), ctx.code_block() == null ? new ArrayList<>() : ctx.code_block().subList(
+                1, ctx.expression().size()
+        ).stream().map(
+                this::visit
+        ).toList(), ctx.elseblock == null ? null : visit(ctx.elseblock)
+        );
+
+        instructionsQueue.add(ret);
+
+        return ret;
     }
 }
