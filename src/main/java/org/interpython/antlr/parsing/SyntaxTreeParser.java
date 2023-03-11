@@ -8,6 +8,7 @@ import org.interpython.antlr.InterPythonParser;
 import org.interpython.antlr.parsing.statements.StatementVisitor;
 import org.interpython.antlr.parsing.statements.Statements;
 import org.interpython.antlr.parsing.syntax.SyntaxErrorParser;
+import org.interpython.core.utils.Scope;
 
 import java.io.IOException;
 import java.util.Queue;
@@ -25,7 +26,7 @@ public class SyntaxTreeParser {
         parser.removeErrorListeners();
         parser.addErrorListener(new SyntaxErrorParser(fileAbsolutePath.substring(fileAbsolutePath.lastIndexOf('/') + 1)));
 
-        StatementVisitor statementVisitor = new StatementVisitor();
+        StatementVisitor statementVisitor = new StatementVisitor(new Scope(null));
 
         statementVisitor.visit(parser.code());
 

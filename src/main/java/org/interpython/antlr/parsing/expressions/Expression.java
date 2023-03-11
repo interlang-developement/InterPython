@@ -1,9 +1,9 @@
 package org.interpython.antlr.parsing.expressions;
 
+import org.interpython.antlr.parsing.statements.Statements;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 
-public interface Expression extends Opcodes {
+public interface Expression extends Statements {
     void apply(MethodVisitor methodVisitor);
 
     int localVariableCount();

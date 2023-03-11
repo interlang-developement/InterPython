@@ -67,10 +67,15 @@ statement :
       ;
 
 complex_statement :
-        if_expr;
+        if_statement |
+        def_statement;
 
-if_expr :
+if_statement :
     IF ifexpr=expression ifblock=code_block (ELIF expression code_block)* (ELSE elseblock=code_block)?
+    ;
+
+def_statement :
+    'def' NAME '(' ')' code_block
     ;
 
 code_block : ':' NEWLINE* INDENT lines DEDENT;

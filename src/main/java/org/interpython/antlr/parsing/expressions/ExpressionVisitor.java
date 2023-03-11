@@ -10,8 +10,16 @@ import org.interpython.antlr.parsing.expressions.builtinTypes.IntExpression;
 import org.interpython.antlr.parsing.expressions.builtinTypes.StringExpression;
 import org.interpython.antlr.parsing.expressions.builtinTypes.VariableReference;
 import org.interpython.antlr.parsing.statements.StatementVisitor;
+import org.interpython.core.utils.Scope;
 
 public class ExpressionVisitor extends InterPythonBaseVisitor<Expression> {
+
+    public Scope scope;
+    public ExpressionVisitor(Scope scope){
+        super();
+        this.scope = scope;
+    }
+
     @Override
     public StringExpression visitSTRING(InterPythonParser.STRINGContext ctx) {
         return new StringExpression(ctx.STRING().toString().substring(1, ctx.STRING().toString().length() - 1));
@@ -24,7 +32,7 @@ public class ExpressionVisitor extends InterPythonBaseVisitor<Expression> {
 
     @Override
     public Expression visitVAR(InterPythonParser.VARContext ctx) {
-        return new VariableReference(StatementVisitor.variables.get(ctx.getText()));
+        return new VariableReference(scope.getVariable(ctx.getText()));
     }
 
     @Override
